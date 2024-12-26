@@ -1,0 +1,49 @@
+import yfinance as yf
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Function to plot the stock data
+def make_graph(data, title):
+    plt.figure(figsize=(10, 5))
+    plt.plot(data['Date'], data['Close'])
+    plt.title(title)
+    plt.xlabel('Date')
+    plt.ylabel('Close Price')
+    plt.grid(True)
+    plt.show()
+
+# Question 1: Use yfinance to Extract Stock Data for Tesla
+tesla_data = yf.download('TSLA', start='2010-01-01', end='2021-12-31')
+tesla_data.reset_index(inplace=True)
+print(tesla_data.head())
+
+# Question 2: Use Webscraping to Extract Tesla Revenue Data
+url = "https://www.macrotrends.net/stocks/charts/TSLA/tesla/revenue"
+html_data = pd.read_html(url)
+tesla_revenue = html_data[0]
+tesla_revenue.columns = ['Date', 'Revenue']
+tesla_revenue['Revenue'] = tesla_revenue['Revenue'].str.replace(',', '').str.replace('$', '')
+tesla_revenue.dropna(inplace=True)
+tesla_revenue.reset_index(drop=True, inplace=True)
+print(tesla_revenue.tail())
+
+# Question 3: Use yfinance to Extract Stock Data for GameStop
+gme_data = yf.download('GME', start='2010-01-01', end='2021-12-31')
+gme_data.reset_index(inplace=True)
+print(gme_data.head())
+
+# Question 4: Use Webscraping to Extract GME Revenue Data
+url = "https://www.macrotrends.net/stocks/charts/GME/gamestop/revenue"
+html_data = pd.read_html(url)
+gme_revenue = html_data[0]
+gme_revenue.columns = ['Date', 'Revenue']
+gme_revenue['Revenue'] = gme_revenue['Revenue'].str.replace(',', '').str.replace('$', '')
+gme_revenue.dropna(inplace=True)
+gme_revenue.reset_index(drop=True, inplace=True)
+print(gme_revenue.tail())
+
+# Question 5: Plot Tesla Stock Graph
+make_graph(tesla_data, 'Tesla Stock Price')
+
+# Question 6: Plot GameStop Stock Graph
+make_graph(gme_data, 'GameStop Stock Price')
